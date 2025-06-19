@@ -36,4 +36,8 @@ public class User {
         this.username = username;
         this.password = password;
     }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
 }
