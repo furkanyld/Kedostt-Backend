@@ -21,7 +21,7 @@ public class User {
     @Column(unique = true)
     private String username;
 
-    @Column(nullable = false, length = 25)
+    @Column(nullable = false, length = 255)
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -35,9 +35,5 @@ public class User {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
     }
 }
