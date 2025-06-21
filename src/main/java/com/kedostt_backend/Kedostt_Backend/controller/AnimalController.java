@@ -1,7 +1,10 @@
 package com.kedostt_backend.Kedostt_Backend.controller;
 
+import com.kedostt_backend.Kedostt_Backend.dto.AnimalRequest;
+import com.kedostt_backend.Kedostt_Backend.dto.AnimalResponse;
 import com.kedostt_backend.Kedostt_Backend.model.Animal;
 import com.kedostt_backend.Kedostt_Backend.repository.AnimalRepository;
+import com.kedostt_backend.Kedostt_Backend.service.AnimalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,23 +17,28 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AnimalController {
 
-    private final AnimalRepository animalRepository;
+    private final AnimalService animalService;
 
     @GetMapping
-    public List<Animal> getAllAnimals() {
-        return animalRepository.findAll();
+    public ResponseEntity<List<AnimalResponse>> getAllAnimals() {
+        return ResponseEntity.ok(animalService.getAllAnimals());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AnimalResponse> getAnimalById(@PathVariable Long id){
+        return ResponseEntity.ok(animalService.getAnimalById(id));
     }
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Animal> createAnimal(@RequestBody Animal animal) {
-        return ResponseEntity.ok(animalRepository.save(animal));
+    public ResponseEntity<AnimalResponse> createAnimal(@RequestBody AnimalRequest request) {
+        return ResponseEntity.ok(animalService.createAnimal(request));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteAnimal(@PathVariable Long id) {
-        animalRepository.deleteById(id);
-        return ResponseEntity.ok("Hayvan silindi.");
+        animalService.deleteAnimal(id);
+        return ResponseEntity.ok("Hayvan silindi: "+id);
     }
 }

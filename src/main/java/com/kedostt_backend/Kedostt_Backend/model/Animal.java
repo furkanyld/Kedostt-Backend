@@ -2,11 +2,14 @@ package com.kedostt_backend.Kedostt_Backend.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.List;
+import java.util.ArrayList;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "animals")
 public class Animal {
@@ -31,4 +34,7 @@ public class Animal {
     private String imageUrl;
 
     private boolean adopted = false;
+
+    @OneToMany(mappedBy = "animal", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Donation> donations = new ArrayList<>();
 }
