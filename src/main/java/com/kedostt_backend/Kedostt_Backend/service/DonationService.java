@@ -1,16 +1,16 @@
 package com.kedostt_backend.Kedostt_Backend.service;
 
-import com.kedostt_backend.Kedostt_Backend.dto.DonationRequest;
+import com.kedostt_backend.Kedostt_Backend.dto.DonationDto;
 import com.kedostt_backend.Kedostt_Backend.model.Donation;
 
 import java.util.List;
 
 public interface DonationService {
 
-    Donation createDonation(DonationRequest request);
-    List<Donation> getAllDonations();
-    Donation getDonationById(Long Id);
-    List<Donation> getDonationsByAnimalId(Long id);
-    Donation updateDonation(Long id, DonationRequest request);
-    Donation deleteDonation(Long id);
+    DonationDto createDonation(DonationDto request);
+    List<DonationDto> getAllDonations();
+    DonationDto getDonationById(Long Id);
+    List<DonationDto> getDonationsByAnimalId(Long id);
+    DonationDto updateDonation(Long id, DonationDto request);
+    DonationDto deleteDonation(Long id);
 }

@@ -1,6 +1,7 @@
 package com.kedostt_backend.Kedostt_Backend.impl;
 
-import com.kedostt_backend.Kedostt_Backend.dto.DonationRequest;
+import com.kedostt_backend.Kedostt_Backend.dto.DonationDto;
+import com.kedostt_backend.Kedostt_Backend.mapper.DonationMapper;
 import com.kedostt_backend.Kedostt_Backend.model.Animal;
 import com.kedostt_backend.Kedostt_Backend.model.Donation;
 import com.kedostt_backend.Kedostt_Backend.repository.AnimalRepository;
@@ -14,63 +15,66 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class DonationServiceImpl implements DonationService {
+
     private final DonationRepository donationRepository;
     private final AnimalRepository animalRepository;
+    private final DonationMapper donationMapper;
 
     @Override
-    public Donation createDonation(DonationRequest request){
-        Animal animal = animalRepository.findById(request.getAnimalId())
-                .orElseThrow(()-> new RuntimeException("Hayvan Bulunamadı!"));
+    public DonationDto createDonation(DonationDto donationDto) {
+        Animal animal = animalRepository.findById(donationDto.getAnimalId())
+                .orElseThrow(() -> new RuntimeException("Hayvan bulunamadı!"));
 
-        Donation donation = new Donation();
-        donation.setAmount(request.getAmount());
-        donation.setDonorName(request.getDonorName());
-        donation.setMessage(request.getMessage());
+        Donation donation = donationMapper.toEntity(donationDto, animal);
+        return donationMapper.toDto(donationRepository.save(donation));
+    }
+
+    @Override
+    public List<DonationDto> getAllDonations(){
+        return donationRepository.findAll()
+                .stream()
+                .map(donationMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public DonationDto getDonationById(Long id) {
+        Donation donation = donationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Bağış bulunamadı!"));
+        return donationMapper.toDto(donation);
+    }
+
+    @Override
+    public List<DonationDto> getDonationsByAnimalId(Long id) {
+        Animal animal = animalRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Hayvan bulunamadı!"));
+        return animal.getDonations()
+                .stream()
+                .map(donationMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public DonationDto updateDonation(Long id, DonationDto donationDto) {
+        Donation donation = donationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Bağış bulunamadı"));
+
+        Animal animal = animalRepository.findById(donationDto.getAnimalId())
+                .orElseThrow(() -> new RuntimeException("Hayvan bulunamadı"));
+
+        donation.setAmount(donationDto.getAmount());
+        donation.setDonorName(donationDto.getDonorName());
+        donation.setMessage(donationDto.getMessage());
         donation.setAnimal(animal);
 
-        return donationRepository.save(donation);
+        return donationMapper.toDto(donationRepository.save(donation));
     }
 
     @Override
-    public List<Donation> getAllDonations(){
-        return donationRepository.findAll();
-    }
-
-    @Override
-    public Donation getDonationById(Long id){
-        return donationRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Bağış Bulunamadı!"));
-    }
-
-    @Override
-    public List<Donation> getDonationsByAnimalId(Long id){
-       Animal animal = animalRepository.findById(id)
-               .orElseThrow(()-> new RuntimeException("Hayvan bulunamadı!"));
-       return animal.getDonations();
-    }
-
-    @Override
-    public Donation updateDonation(Long id, DonationRequest request) {
+    public DonationDto deleteDonation(Long id) {
         Donation donation = donationRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Bağış bulunamadı"));
-
-        Animal animal = animalRepository.findById(request.getAnimalId())
-            .orElseThrow(() -> new RuntimeException("Hayvan bulunamadı"));
-
-        donation.setAmount(request.getAmount());
-        donation.setDonorName(request.getDonorName());
-        donation.setMessage(request.getMessage());
-        donation.setAnimal(animal);
-
-        return donationRepository.save(donation);
-    }
-
-    @Override
-    public Donation deleteDonation(Long id) {
-        Donation donation = donationRepository.findById(id)
-                        .orElseThrow(() -> new RuntimeException("Bağış bulunamadı"));
-
+                .orElseThrow(() -> new RuntimeException("Bağış bulunamadı"));
         donationRepository.delete(donation);
-        return donation;
+        return donationMapper.toDto(donation);
     }
 }
