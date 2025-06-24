@@ -8,6 +8,7 @@ import lombok.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Set;
@@ -20,9 +21,8 @@ public class DataInitializer {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Bean
-    public CommandLineRunner initData() {
-        return args -> {
+    @EventListener(org.springframework.boot.context.event.ApplicationReadyEvent.class)
+    public void initData() {
 
             Role adminRole = roleRepository.findByName("ROLE_ADMIN")
                     .orElseGet(() -> roleRepository.save(new Role("ROLE_ADMIN")));
@@ -36,6 +36,5 @@ public class DataInitializer {
                 userRepository.save(admin);
                 System.out.println("✅ Varsayılan admin kullanıcısı oluşturuldu (admin / admin123)");
             }
-        };
     }
 }

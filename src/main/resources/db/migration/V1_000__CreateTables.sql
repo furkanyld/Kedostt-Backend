@@ -20,7 +20,7 @@ CREATE TABLE users (
 );
 
 CREATE TABLE adoptions (
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     full_name VARCHAR(255) NOT NULL,
     age INT NOT NULL,
     occupation VARCHAR(255) NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE adoptions (
 );
 
 CREATE TABLE donations (
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     donor_name VARCHAR(255) NOT NULL,
     amount NUMERIC(10, 2) NOT NULL,
     message TEXT,
@@ -44,4 +44,17 @@ CREATE TABLE donations (
     animal_id BIGINT NOT NULL,
     CONSTRAINT fk_donations_animal
         FOREIGN KEY (animal_id) REFERENCES animals(id) ON DELETE CASCADE
+);
+
+CREATE TABLE roles (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE user_roles (
+    user_id BIGINT NOT NULL,
+    role_id BIGINT NOT NULL,
+    PRIMARY KEY (user_id, role_id),
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT fk_role FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
 );
