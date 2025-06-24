@@ -7,13 +7,24 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class AnimalResponse {
+
     private Long id;
+
     private String name;
+
     private String species;
+
     private String breed;
-    private int age;
+
+    private int ageYears;
+
+    private int ageMonths;
+
     private String gender;
+
     private String description;
+
     private String imageUrl;
+
     private boolean adopted;
 }
