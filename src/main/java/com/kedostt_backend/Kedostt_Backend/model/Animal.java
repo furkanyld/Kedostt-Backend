@@ -24,7 +24,11 @@ public class Animal {
 
     private String breed; // ırk
 
-    private int age;
+    @Column(name = "age_years")
+    private int ageYears;
+
+    @Column(name = "age_months")
+    private int ageMonths;
 
     private String gender;
 
