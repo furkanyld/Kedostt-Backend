@@ -1,5 +1,5 @@
 CREATE TABLE animals (
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     species VARCHAR(255) NOT NULL,
     breed VARCHAR(255),
@@ -12,11 +12,10 @@ CREATE TABLE animals (
 );
 
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(255) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    role VARCHAR(20) DEFAULT 'USER'
+    password VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE adoptions (
@@ -47,7 +46,7 @@ CREATE TABLE donations (
 );
 
 CREATE TABLE roles (
-    id SERIAL PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE
 );
 
