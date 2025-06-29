@@ -27,10 +27,15 @@ public class UserController {
         return userService.getUserById(id);
     }
 
-    @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/users")
     public User createUser(@RequestBody User user) {
         return userService.createUser(user);
+    }
+
+    @PostMapping("/admins")
+    @PreAuthorize("hasRole('ADMIN')")
+    public User createAdmin(@RequestBody User user) {
+        return userService.createAdmin(user);
     }
 
     @PutMapping("/{id}")
