@@ -42,6 +42,20 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
+    public AnimalResponse updateAnimal(Long id, AnimalRequest request) {
+        Animal animal = animalRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Hayvan bulunamadı!"));
+
+        animal.setName(request.getName());
+        animal.setDescription(request.getDescription());
+        animal.setImageUrl(request.getImageUrl());
+
+        Animal saved = animalRepository.save(animal);
+        return animalMapper.toDto(saved);
+    }
+
+
+    @Override
     public void deleteAnimal(Long id) {
         if (!animalRepository.existsById(id)) {
             throw new RuntimeException("Silinecek hayvan bulunamadı: " + id);

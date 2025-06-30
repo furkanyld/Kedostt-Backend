@@ -8,5 +8,6 @@ public interface AnimalService {
     AnimalResponse  createAnimal(AnimalRequest animalRequest );
     List<AnimalResponse> getAllAnimals();
     AnimalResponse getAnimalById(Long id);
+    AnimalResponse updateAnimal(Long id, AnimalRequest request);
     void deleteAnimal(Long id);
 }

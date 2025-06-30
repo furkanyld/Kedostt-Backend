@@ -32,9 +32,10 @@ public class Animal {
 
     private String gender;
 
-    @Column(length = 1000)
+    @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(columnDefinition = "TEXT")
     private String imageUrl;
 
     private boolean adopted = false;

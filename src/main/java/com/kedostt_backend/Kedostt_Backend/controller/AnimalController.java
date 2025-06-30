@@ -35,6 +35,13 @@ public class AnimalController {
         return ResponseEntity.ok(animalService.createAnimal(request));
     }
 
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<AnimalResponse> updateAnimal(@PathVariable Long id, @RequestBody AnimalRequest request) {
+        AnimalResponse updated = animalService.updateAnimal(id, request);
+        return ResponseEntity.ok(updated);
+    }
+
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteAnimal(@PathVariable Long id) {
