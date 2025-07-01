@@ -4,9 +4,9 @@ spring:
   application:
     name: Kedostt-Backend
   datasource:
-    url: jdbc:postgresql://localhost:5432/KedosttDb
-    username: KedosttAdmin
-    password: kedosttadmin
+    url: jdbc:postgresql://dpg-d1hrpore5dus739cf09g-a:5432/kedosttdb
+    username: kedosttadmin
+    password: 2yAISDILG4kJhjCUlwjJeZ5Ovyk1FTh4
     default-schema: public
   jpa:
     hibernate:

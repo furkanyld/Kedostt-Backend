@@ -1,0 +1,3 @@
+ALTER TABLE animals
+ALTER COLUMN image_url TYPE TEXT,
+ALTER COLUMN description TYPE TEXT;
