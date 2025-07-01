@@ -32,10 +32,13 @@ public class SecurityConfig {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
+                .httpBasic().disable() // 🔥 Basic Auth'u devre dışı bırak
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(
-                        (request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")))
+                        (request, response, authException) ->
+                                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized")))
                 .authorizeHttpRequests(auth -> auth
+                        // Swagger ve dökümantasyon için izinler
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
@@ -43,13 +46,20 @@ public class SecurityConfig {
                                 "/swagger-resources/**",
                                 "/webjars/**"
                         ).permitAll()
+                        // Preflight (OPTIONS) isteklerini izin ver
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                        // Public endpointler
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/animals/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/adoption/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/donation/**").permitAll()
+
+                        // Admin yetkilendirme
                         .requestMatchers(HttpMethod.POST, "/api/animals").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/animals/**").hasRole("ADMIN")
+
+                        // Diğer tüm istekler -> Authenticated
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -62,10 +72,15 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(List.of(
                 "https://kedostt-frontend.onrender.com"
+                // İleride domain eklersen buraya ekle
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
+
+        // 🔥 Ekstra garanti
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
