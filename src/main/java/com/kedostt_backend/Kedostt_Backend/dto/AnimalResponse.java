@@ -27,4 +27,6 @@ public class AnimalResponse {
     private String imageUrl;
 
     private boolean adopted;
+
+    private boolean isVisible;
 }

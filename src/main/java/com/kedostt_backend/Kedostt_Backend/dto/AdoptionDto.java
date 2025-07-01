@@ -28,6 +28,8 @@ public class AdoptionDto {
     @Email(message = "Geçerli bir email giriniz")
     private String email;
 
+    private String status;
+
     private String note;
 
     private Long animalId;

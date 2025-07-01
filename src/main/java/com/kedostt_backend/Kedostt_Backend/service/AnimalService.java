@@ -9,5 +9,6 @@ public interface AnimalService {
     List<AnimalResponse> getAllAnimals();
     AnimalResponse getAnimalById(Long id);
     AnimalResponse updateAnimal(Long id, AnimalRequest request);
+    void toggleVisibility(Long animalId);
     void deleteAnimal(Long id);
 }

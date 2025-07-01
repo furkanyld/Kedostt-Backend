@@ -3,7 +3,9 @@ package com.kedostt_backend.Kedostt_Backend.mapper;
 import com.kedostt_backend.Kedostt_Backend.dto.AdoptionDto;
 import com.kedostt_backend.Kedostt_Backend.model.Adoption;
 import com.kedostt_backend.Kedostt_Backend.model.Animal;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 @Component
 public class AdoptionMapper {
@@ -15,6 +17,7 @@ public class AdoptionMapper {
         adoption.setOccupation(dto.getOccupation());
         adoption.setPhoneNumber(dto.getPhoneNumber());
         adoption.setEmail(dto.getEmail());
+        adoption.setStatus(dto.getStatus() != null ? dto.getStatus() : "PENDING");
         adoption.setNote(dto.getNote());
         adoption.setAnimal(animal);
         return adoption;
@@ -28,7 +31,11 @@ public class AdoptionMapper {
         dto.setOccupation(adoption.getOccupation());
         dto.setPhoneNumber(adoption.getPhoneNumber());
         dto.setEmail(adoption.getEmail());
+        dto.setStatus(adoption.getStatus());
         dto.setNote(adoption.getNote());
+        if (adoption.getAnimal() == null) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Animal bilgisi bulunamadı.");
+        }
         dto.setAnimalId(adoption.getAnimal().getId());
         return dto;
     }

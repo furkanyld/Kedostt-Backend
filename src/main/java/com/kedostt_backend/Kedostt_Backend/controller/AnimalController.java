@@ -48,4 +48,11 @@ public class AnimalController {
         animalService.deleteAnimal(id);
         return ResponseEntity.ok("Hayvan silindi: "+id);
     }
+
+    @PutMapping("/{id}/toggle-visibility")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> toggleVisibility(@PathVariable Long id) {
+        animalService.toggleVisibility(id);
+        return ResponseEntity.ok("Yayın durumu değiştirildi.");
+    }
 }

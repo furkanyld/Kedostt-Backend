@@ -1,0 +1,2 @@
+ALTER TABLE animals
+ADD COLUMN is_visible BOOLEAN DEFAULT TRUE;

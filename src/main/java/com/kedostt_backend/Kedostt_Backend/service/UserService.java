@@ -1,14 +1,17 @@
 package com.kedostt_backend.Kedostt_Backend.service;
 
+import com.kedostt_backend.Kedostt_Backend.dto.RegisterRequest;
+import com.kedostt_backend.Kedostt_Backend.dto.UserDto;
 import com.kedostt_backend.Kedostt_Backend.model.User;
 
 import java.util.List;
 
 public interface UserService {
-    List<User> getAllUsers();
-    User getUserById(Long id);
-    User createUser(User user);
+    UserDto registerUser(RegisterRequest registerRequest);
+    List<UserDto> getAllUsers();
+    UserDto getUserById(Long id);
+    UserDto createUser(UserDto userDto);
     User createAdmin(User user);
-    User updateUser(Long id, User user);
-    User deleteUser(Long id);
+    UserDto updateUser(Long id, UserDto userDto);
+    UserDto deleteUser(Long id);
 }

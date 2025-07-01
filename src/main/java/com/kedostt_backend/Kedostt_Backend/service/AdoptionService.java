@@ -7,6 +7,8 @@ import java.util.List;
 public interface AdoptionService {
 
     AdoptionDto createAdoption(AdoptionDto dto);
-
     List<AdoptionDto> getAllAdoptions();
+    AdoptionDto updateAdoptionStatus(Long id, String status);
+    void acceptAdoption(Long adoptionId);
+    void rejectAdoption(Long adoptionId);
 }

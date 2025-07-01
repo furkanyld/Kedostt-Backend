@@ -54,6 +54,13 @@ public class AnimalServiceImpl implements AnimalService {
         return animalMapper.toDto(saved);
     }
 
+    @Override
+    public void toggleVisibility(Long animalId) {
+        Animal animal = animalRepository.findById(animalId)
+                .orElseThrow(() -> new RuntimeException("Hayvan bulunamadı"));
+        animal.setVisible(!animal.isVisible());
+        animalRepository.save(animal);
+    }
 
     @Override
     public void deleteAnimal(Long id) {

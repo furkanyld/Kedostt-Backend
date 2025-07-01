@@ -1,5 +1,7 @@
-package com.kedostt_backend.Kedostt_Backend.impl;
+package com.kedostt_backend.Kedostt_Backend.service.impl;
 
+import com.kedostt_backend.Kedostt_Backend.dto.RegisterRequest;
+import com.kedostt_backend.Kedostt_Backend.dto.UserDto;
 import com.kedostt_backend.Kedostt_Backend.model.Role;
 import com.kedostt_backend.Kedostt_Backend.model.User;
 import com.kedostt_backend.Kedostt_Backend.repository.RoleRepository;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,65 +24,114 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    @Override
-    public User getUserById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id " + id));
-    }
-
-    @Override
-    public User createUser(User user) {
-        if(userRepository.existsByUsername(user.getUsername()))
-            throw new RuntimeException("Username is already taken");
-        if(userRepository.existsByEmail(user.getEmail()))
-            throw new RuntimeException("Email is already in use");
-
-        Role userRole = roleRepository.findByName("USER")
-                .orElseThrow(() -> new RuntimeException("Role USER not found"));
-        user.setRoles(Set.of(userRole));
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        return userRepository.save(user);
-    }
-
-    public User createAdmin(User user) {
-        if(userRepository.existsByUsername(user.getUsername()))
-            throw new RuntimeException("Username is already taken");
-        if(userRepository.existsByEmail(user.getEmail()))
-            throw new RuntimeException("Email is already in use");
-
-        Role adminRole = roleRepository.findByName("ADMIN")
-                .orElseThrow(() -> new RuntimeException("Role ADMIN not found"));
-        user.setRoles(Set.of(adminRole));
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-        return userRepository.save(user);
-    }
-
-    @Override
-    public User updateUser(Long id, User userDetails) {
-        User user = getUserById(id);
-
-        user.setUsername(userDetails.getUsername());
-        user.setEmail(userDetails.getEmail());
-
-        if(userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()){
-            user.setPassword(userDetails.getPassword());
+    public UserDto registerUser(RegisterRequest request) {
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new RuntimeException("Username already exists.");
+        }
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new RuntimeException("Email already exists.");
         }
 
+        Role userRole = roleRepository.findByName("USER")
+                .orElseThrow(() -> new RuntimeException("Role USER not found."));
+
+        User user = new User();
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRoles(Set.of(userRole));
+
+        User savedUser = userRepository.save(user);
+        return mapToDto(savedUser);
+    }
+
+    @Override
+    public List<UserDto> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public UserDto getUserById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+        return mapToDto(user);
+    }
+
+    @Override
+    public UserDto createUser(UserDto userDto) {
+        if (userRepository.existsByUsername(userDto.getUsername())) {
+            throw new RuntimeException("Username already exists.");
+        }
+        if (userRepository.existsByEmail(userDto.getEmail())) {
+            throw new RuntimeException("Email already exists.");
+        }
+
+        Role userRole = roleRepository.findByName("USER")
+                .orElseThrow(() -> new RuntimeException("Role USER not found."));
+
+        User user = new User();
+        user.setUsername(userDto.getUsername());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(passwordEncoder.encode("123456")); // Default password, ileride değiştirilebilir
+        user.setRoles(Set.of(userRole));
+
+        User savedUser = userRepository.save(user);
+        return mapToDto(savedUser);
+    }
+
+    @Override
+    public User createAdmin(User user) {
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new RuntimeException("Username already exists.");
+        }
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new RuntimeException("Email already exists.");
+        }
+
+        Role adminRole = roleRepository.findByName("ADMIN")
+                .orElseThrow(() -> new RuntimeException("Role ADMIN not found."));
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(Set.of(adminRole));
+
         return userRepository.save(user);
     }
 
     @Override
-    public User deleteUser(Long id) {
+    public UserDto updateUser(Long id, UserDto userDto) {
         User user = userRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("Kullanıcı Bulunamadı: "+id));
-        userRepository.deleteById(id);
-        return user;
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+
+        user.setUsername(userDto.getUsername());
+        user.setEmail(userDto.getEmail());
+        // Parola değişikliği burada yapılmıyor, istersek ayrıca endpoint açarız
+
+        User updatedUser = userRepository.save(user);
+        return mapToDto(updatedUser);
+    }
+
+    @Override
+    public UserDto deleteUser(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+
+        userRepository.delete(user);
+        return mapToDto(user);
+    }
+
+    private UserDto mapToDto(User user) {
+        String role = user.getRoles().stream()
+                .map(Role::getName)
+                .findFirst()
+                .orElse("UNKNOWN");
+
+        return UserDto.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .role(role)
+                .build();
     }
 }
-

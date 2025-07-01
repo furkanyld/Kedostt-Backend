@@ -35,6 +35,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGeneralExceptions(Exception ex) {
+        ex.printStackTrace();
         Map<String, String> error = new HashMap<>();
         error.put("error", "Beklenmeyen bir hata oluştu");
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);

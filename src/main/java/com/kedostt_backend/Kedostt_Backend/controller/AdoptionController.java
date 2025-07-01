@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/adoptions")
+@RequestMapping("/api/adoption")
 @RequiredArgsConstructor
 public class AdoptionController {
 
@@ -28,5 +28,27 @@ public class AdoptionController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<AdoptionDto>> getAllAdoptions() {
         return ResponseEntity.ok(adoptionService.getAllAdoptions());
+    }
+
+    @PutMapping("/{id}/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<AdoptionDto> updateStatus(@PathVariable Long id, @RequestParam String status) {
+
+        AdoptionDto updated = adoptionService.updateAdoptionStatus(id, status);
+        return ResponseEntity.ok(updated);
+    }
+
+    @PostMapping("/adoptions/{adoptionId}/accept")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> acceptAdoption(@PathVariable Long adoptionId) {
+        adoptionService.acceptAdoption(adoptionId);
+        return ResponseEntity.ok("Sahiplenme isteği kabul edildi.");
+    }
+
+    @PostMapping("/adoptions/{adoptionId}/reject")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> rejectAdoption(@PathVariable Long adoptionId) {
+        adoptionService.rejectAdoption(adoptionId);
+        return ResponseEntity.ok("Sahiplenme isteği reddedildi.");
     }
 }

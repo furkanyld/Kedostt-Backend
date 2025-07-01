@@ -31,12 +31,15 @@ public class Adoption {
     @Column(nullable = false)
     private String email;
 
+    @Column(nullable = false)
+    private String status = "PENDING";
+
     private String note;
 
     private LocalDateTime createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "animal_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "animal_id", nullable = false)
     private Animal animal;
 
     @PrePersist

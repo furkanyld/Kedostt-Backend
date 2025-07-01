@@ -31,4 +31,6 @@ public class AnimalRequest {
     private String description;
 
     private String imageUrl;
+
+    private boolean isVisible = true;
 }

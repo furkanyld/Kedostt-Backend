@@ -1,8 +1,11 @@
 package com.kedostt_backend.Kedostt_Backend.controller;
 
+import com.kedostt_backend.Kedostt_Backend.dto.RegisterRequest;
+import com.kedostt_backend.Kedostt_Backend.dto.UserDto;
 import com.kedostt_backend.Kedostt_Backend.model.User;
 import com.kedostt_backend.Kedostt_Backend.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,39 +18,47 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping
+    @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+        return ResponseEntity.ok(userService.createUser(userDto));
     }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public User getUserById(@PathVariable Long id) {
-        return userService.getUserById(id);
+    @PostMapping("/register")
+    public ResponseEntity<UserDto> registerUser(@RequestBody RegisterRequest request) {
+        return ResponseEntity.ok(userService.registerUser(request));
     }
 
-    @PostMapping("/users")
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
-    }
-
-    @PostMapping("/admins")
+    @PostMapping("/create-admin")
     @PreAuthorize("hasRole('ADMIN')")
-    public User createAdmin(@RequestBody User user) {
-        return userService.createAdmin(user);
+    public ResponseEntity<User> createAdmin(@RequestBody User user) {
+        return ResponseEntity.ok(userService.createAdmin(user));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public User updateUser(@PathVariable Long id, @RequestBody User user) {
-        return userService.updateUser(id, user);
+    public ResponseEntity<UserDto> updateUser(
+            @PathVariable Long id,
+            @RequestBody UserDto userDto) {
+        return ResponseEntity.ok(userService.updateUser(id, userDto));
+    }
+
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getUserById(id));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public User deleteUser(@PathVariable Long id) {
-        return userService.deleteUser(id);
+    public ResponseEntity<UserDto> deleteUser(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.deleteUser(id));
     }
 }
 

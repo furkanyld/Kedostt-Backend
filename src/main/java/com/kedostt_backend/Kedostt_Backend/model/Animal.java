@@ -40,6 +40,9 @@ public class Animal {
 
     private boolean adopted = false;
 
+    @Column(nullable = false)
+    private boolean isVisible = true;
+
     @OneToMany(mappedBy = "animal", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Donation> donations = new ArrayList<>();
 }

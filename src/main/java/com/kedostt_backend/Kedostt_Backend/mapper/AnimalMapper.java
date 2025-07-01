@@ -18,6 +18,7 @@ public class AnimalMapper {
                 .gender(request.getGender())
                 .description(request.getDescription())
                 .imageUrl(request.getImageUrl())
+                .isVisible(request.isVisible())
                 .build();
     }
 
@@ -33,6 +34,19 @@ public class AnimalMapper {
                 .description(animal.getDescription())
                 .imageUrl(animal.getImageUrl())
                 .adopted(animal.isAdopted())
+                .isVisible(animal.isVisible())
                 .build();
+    }
+
+    public void updateEntity(Animal animal, AnimalRequest request) {
+        animal.setName(request.getName());
+        animal.setSpecies(request.getSpecies());
+        animal.setBreed(request.getBreed());
+        animal.setAgeYears(request.getAgeYears());
+        animal.setAgeMonths(request.getAgeMonths());
+        animal.setGender(request.getGender());
+        animal.setDescription(request.getDescription());
+        animal.setImageUrl(request.getImageUrl());
+        animal.setVisible(request.isVisible());
     }
 }
