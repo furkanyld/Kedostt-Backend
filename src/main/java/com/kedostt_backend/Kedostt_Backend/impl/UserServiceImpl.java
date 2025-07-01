@@ -60,6 +60,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto getCurrentUser(String username){
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return mapToDto(user);
+    }
+
+    @Override
     public UserDto createUser(UserDto userDto) {
         if (userRepository.existsByUsername(userDto.getUsername())) {
             throw new RuntimeException("Username already exists.");
@@ -106,7 +113,18 @@ public class UserServiceImpl implements UserService {
 
         user.setUsername(userDto.getUsername());
         user.setEmail(userDto.getEmail());
-        // Parola değişikliği burada yapılmıyor, istersek ayrıca endpoint açarız
+
+        User updatedUser = userRepository.save(user);
+        return mapToDto(updatedUser);
+    }
+
+    @Override
+    public UserDto updateOwnUser(String username, UserDto userDto){
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(()-> new RuntimeException("Kullanıcı bulunamadı!"));
+
+        user.setUsername(userDto.getUsername());
+        user.setEmail(userDto.getEmail());
 
         User updatedUser = userRepository.save(user);
         return mapToDto(updatedUser);

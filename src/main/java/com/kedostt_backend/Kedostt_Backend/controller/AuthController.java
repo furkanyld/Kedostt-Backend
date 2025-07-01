@@ -2,7 +2,11 @@ package com.kedostt_backend.Kedostt_Backend.controller;
 
 import com.kedostt_backend.Kedostt_Backend.dto.AuthResponse;
 import com.kedostt_backend.Kedostt_Backend.dto.LoginRequest;
+import com.kedostt_backend.Kedostt_Backend.dto.RegisterRequest;
+import com.kedostt_backend.Kedostt_Backend.dto.UserDto;
 import com.kedostt_backend.Kedostt_Backend.security.JwtTokenProvider;
+import com.kedostt_backend.Kedostt_Backend.service.AuthService;
+import com.kedostt_backend.Kedostt_Backend.service.UserService;
 import lombok.*;
 
 import org.springframework.http.ResponseEntity;
@@ -17,23 +21,18 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
+    private final AuthService authService;
     private final JwtTokenProvider jwtTokenProvider;
+    private final UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        try{
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            loginRequest.getUsername(),
-                            loginRequest.getPassword()
-                    )
-            );
-            String token = jwtTokenProvider.generateToken(authentication);
-            return ResponseEntity.ok(new AuthResponse(token));
-        } catch (AuthenticationException e) {
-            return ResponseEntity.status(401).body("Geçersiz kullanıcı adı veya şifre!");
-        }
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
+        return ResponseEntity.ok(authService.login(loginRequest));
     }
 
+    @PostMapping("/register")
+    public ResponseEntity<UserDto> register(@RequestBody RegisterRequest registerRequest) {
+        UserDto registeredUser = userService.registerUser(registerRequest);
+        return ResponseEntity.ok(registeredUser);
+    }
 }

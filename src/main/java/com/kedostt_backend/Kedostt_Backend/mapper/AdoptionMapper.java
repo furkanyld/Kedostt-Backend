@@ -11,32 +11,34 @@ import org.springframework.web.server.ResponseStatusException;
 public class AdoptionMapper {
 
     public Adoption toEntity(AdoptionDto dto, Animal animal) {
-        Adoption adoption = new Adoption();
-        adoption.setFullName(dto.getFullName());
-        adoption.setAge(dto.getAge());
-        adoption.setOccupation(dto.getOccupation());
-        adoption.setPhoneNumber(dto.getPhoneNumber());
-        adoption.setEmail(dto.getEmail());
-        adoption.setStatus(dto.getStatus() != null ? dto.getStatus() : "PENDING");
-        adoption.setNote(dto.getNote());
-        adoption.setAnimal(animal);
-        return adoption;
+        return Adoption.builder()
+                .fullName(dto.getFullName())
+                .age(dto.getAge())
+                .occupation(dto.getOccupation())
+                .phoneNumber(dto.getPhoneNumber())
+                .email(dto.getEmail())
+                .note(dto.getNote())
+                .status(dto.getStatus() != null ? dto.getStatus() : "PENDING")
+                .animal(animal)
+                .build();
     }
 
     public AdoptionDto toDto(Adoption adoption) {
-        AdoptionDto dto = new AdoptionDto();
-        dto.setId(adoption.getId());
-        dto.setFullName(adoption.getFullName());
-        dto.setAge(adoption.getAge());
-        dto.setOccupation(adoption.getOccupation());
-        dto.setPhoneNumber(adoption.getPhoneNumber());
-        dto.setEmail(adoption.getEmail());
-        dto.setStatus(adoption.getStatus());
-        dto.setNote(adoption.getNote());
         if (adoption.getAnimal() == null) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Animal bilgisi bulunamadı.");
         }
-        dto.setAnimalId(adoption.getAnimal().getId());
-        return dto;
+        return AdoptionDto.builder()
+                .id(adoption.getId())
+                .fullName(adoption.getFullName())
+                .age(adoption.getAge())
+                .occupation(adoption.getOccupation())
+                .phoneNumber(adoption.getPhoneNumber())
+                .email(adoption.getEmail())
+                .status(adoption.getStatus())
+                .note(adoption.getNote())
+                .createdAt(adoption.getCreatedAt())
+                .animalId(adoption.getAnimal().getId())
+                .animalName(adoption.getAnimal().getName())
+                .build();
     }
 }

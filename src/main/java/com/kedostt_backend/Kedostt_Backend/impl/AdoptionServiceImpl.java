@@ -4,8 +4,10 @@ import com.kedostt_backend.Kedostt_Backend.dto.AdoptionDto;
 import com.kedostt_backend.Kedostt_Backend.mapper.AdoptionMapper;
 import com.kedostt_backend.Kedostt_Backend.model.Adoption;
 import com.kedostt_backend.Kedostt_Backend.model.Animal;
+import com.kedostt_backend.Kedostt_Backend.model.User;
 import com.kedostt_backend.Kedostt_Backend.repository.AdoptionRepository;
 import com.kedostt_backend.Kedostt_Backend.repository.AnimalRepository;
+import com.kedostt_backend.Kedostt_Backend.repository.UserRepository;
 import com.kedostt_backend.Kedostt_Backend.service.AdoptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ public class AdoptionServiceImpl implements AdoptionService {
 
     private final AdoptionRepository adoptionRepository;
     private final AnimalRepository animalRepository;
+    private final UserRepository userRepository;
     private final AdoptionMapper adoptionMapper;
 
     @Override
@@ -46,6 +49,17 @@ public class AdoptionServiceImpl implements AdoptionService {
         adoption.setStatus(status);
         adoptionRepository.save(adoption);
         return adoptionMapper.toDto(adoption);
+    }
+
+    @Override
+    public List<AdoptionDto> getAdoptionsByUsername(String username){
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(()-> new RuntimeException("Kullanıcı bulunamadı!"));
+
+        return adoptionRepository.findAllByUser(user)
+                .stream()
+                .map(adoptionMapper::toDto)
+                .toList();
     }
 
     @Override

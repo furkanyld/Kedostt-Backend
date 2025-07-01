@@ -9,6 +9,7 @@ public interface AdoptionService {
     AdoptionDto createAdoption(AdoptionDto dto);
     List<AdoptionDto> getAllAdoptions();
     AdoptionDto updateAdoptionStatus(Long id, String status);
+    List<AdoptionDto> getAdoptionsByUsername(String username);
     void acceptAdoption(Long adoptionId);
     void rejectAdoption(Long adoptionId);
 }

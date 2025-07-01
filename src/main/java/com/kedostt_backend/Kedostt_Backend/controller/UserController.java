@@ -1,12 +1,15 @@
 package com.kedostt_backend.Kedostt_Backend.controller;
 
+import com.kedostt_backend.Kedostt_Backend.dto.AdoptionDto;
 import com.kedostt_backend.Kedostt_Backend.dto.RegisterRequest;
 import com.kedostt_backend.Kedostt_Backend.dto.UserDto;
 import com.kedostt_backend.Kedostt_Backend.model.User;
+import com.kedostt_backend.Kedostt_Backend.service.AdoptionService;
 import com.kedostt_backend.Kedostt_Backend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +20,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final AdoptionService adoptionService;
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
@@ -37,10 +41,31 @@ public class UserController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UserDto> updateUser(
-            @PathVariable Long id,
-            @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
         return ResponseEntity.ok(userService.updateUser(id, userDto));
+    }
+
+    @PutMapping("/me")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<UserDto> updateOwnUser(@RequestBody UserDto userDto, Authentication authentication) {
+        String username = authentication.getName();
+        UserDto updated = userService.updateOwnUser(username, userDto);
+        return ResponseEntity.ok(updated);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserDto> getCurrentUser(Authentication authentication) {
+        String username = authentication.getName();
+        UserDto userDto = userService.getCurrentUser(username);
+        return ResponseEntity.ok(userDto);
+    }
+
+    @GetMapping("/me/adoptions")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<List<AdoptionDto>> getOwnAdoptions(Authentication authentication) {
+        String username = authentication.getName();
+        List<AdoptionDto> adoptions = adoptionService.getAdoptionsByUsername(username);
+        return ResponseEntity.ok(adoptions);
     }
 
     @GetMapping

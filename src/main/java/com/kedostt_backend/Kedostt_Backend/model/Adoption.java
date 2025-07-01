@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Adoption {
 
     @Id
@@ -41,6 +42,10 @@ public class Adoption {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "animal_id", nullable = false)
     private Animal animal;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @PrePersist
     protected void onCreate() {

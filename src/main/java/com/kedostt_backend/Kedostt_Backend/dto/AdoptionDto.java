@@ -2,10 +2,13 @@ package com.kedostt_backend.Kedostt_Backend.dto;
 
 import jakarta.validation.constraints.*;import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class AdoptionDto {
 
     private Long id;
@@ -33,4 +36,8 @@ public class AdoptionDto {
     private String note;
 
     private Long animalId;
+
+    private String animalName;
+
+    private LocalDateTime createdAt;
 }

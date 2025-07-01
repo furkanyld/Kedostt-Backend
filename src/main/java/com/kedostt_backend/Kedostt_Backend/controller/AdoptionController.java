@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +29,14 @@ public class AdoptionController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<AdoptionDto>> getAllAdoptions() {
         return ResponseEntity.ok(adoptionService.getAllAdoptions());
+    }
+
+    @GetMapping("/me")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<List<AdoptionDto>> getOwnAdoptions(Authentication authentication){
+        String username = authentication.getName();
+        List<AdoptionDto> adoptions = adoptionService.getAdoptionsByUsername(username);
+        return ResponseEntity.ok(adoptions);
     }
 
     @PutMapping("/{id}/status")
