@@ -21,9 +21,6 @@ spring:
     locations: classpath:db/migration
     default-schema: public
 
-server:
-  port: 8080
-
 springdoc:
   api-docs:
     path: /v3/api-docs
