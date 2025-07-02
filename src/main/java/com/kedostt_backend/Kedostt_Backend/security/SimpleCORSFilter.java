@@ -18,6 +18,7 @@ public class SimpleCORSFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
 
         String origin = request.getHeader("Origin");
+        System.out.println("CORS Filter triggered for: " + request.getRequestURI() + " Origin: " + origin);
         if ("https://www.kedostt.com.tr".equals(origin) || "https://kedostt.com.tr".equals(origin)) {
             response.setHeader("Access-Control-Allow-Origin", origin);
         }
