@@ -25,11 +25,19 @@ public class AuthController {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
 
+    @CrossOrigin(
+            origins = {"https://www.kedostt.com.tr", "https://kedostt.com.tr"},
+            allowCredentials = "true"
+    )
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
         return ResponseEntity.ok(authService.login(loginRequest));
     }
 
+    @CrossOrigin(
+            origins = {"https://www.kedostt.com.tr", "https://kedostt.com.tr"},
+            allowCredentials = "true"
+    )
     @PostMapping("/register")
     public ResponseEntity<UserDto> register(@RequestBody RegisterRequest registerRequest) {
         UserDto registeredUser = userService.registerUser(registerRequest);
