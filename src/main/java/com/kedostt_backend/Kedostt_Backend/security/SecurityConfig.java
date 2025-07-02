@@ -60,6 +60,8 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of(
+                "https://www.kedostt.com.tr/",
+                "https://kedostt.com.tr/",
                 "https://www.kedostt.com.tr",
                 "https://kedostt.com.tr"
         ));
