@@ -4,9 +4,9 @@ spring:
   application:
     name: Kedostt-Backend
   datasource:
-    url: jdbc:postgresql://dpg-d1hrpore5dus739cf09g-a:5432/kedosttdb
-    username: kedosttadmin
-    password: 2yAISDILG4kJhjCUlwjJeZ5Ovyk1FTh4
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     default-schema: public
   jpa:
     hibernate:
@@ -28,5 +28,5 @@ springdoc:
     path: /swagger-ui.html
 
 app:
-  jwtSecret: KEDOSTT_SUPER_SECRET_KEY_2025_0p6Wz2vFT6N4v91YbU3qCxgT5sKzX8AuYVdJPfR9kLg=
+  jwtSecret: ${JWT_SECRET}
   jwtExpirationMs: 86400000
