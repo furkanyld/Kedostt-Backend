@@ -12,4 +12,5 @@ public interface AdoptionService {
     List<AdoptionDto> getAdoptionsByUsername(String username);
     void acceptAdoption(Long adoptionId);
     void rejectAdoption(Long adoptionId);
+    void deleteAdoption(Long id);
 }

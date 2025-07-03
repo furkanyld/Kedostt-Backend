@@ -86,4 +86,12 @@ public class AdoptionServiceImpl implements AdoptionService {
         adoption.setStatus("REJECTED");
         adoptionRepository.save(adoption);
     }
+
+    @Override
+    public void deleteAdoption(Long id) {
+        Adoption adoption = adoptionRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Başvuru bulunamadı!"));
+
+        adoptionRepository.delete(adoption);
+    }
 }

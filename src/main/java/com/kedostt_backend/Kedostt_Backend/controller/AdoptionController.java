@@ -60,4 +60,12 @@ public class AdoptionController {
         adoptionService.rejectAdoption(adoptionId);
         return ResponseEntity.ok("Sahiplenme isteği reddedildi.");
     }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteAdoption(@PathVariable Long id) {
+        adoptionService.deleteAdoption(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
