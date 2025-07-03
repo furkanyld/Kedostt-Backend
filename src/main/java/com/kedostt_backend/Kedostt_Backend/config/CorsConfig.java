@@ -21,7 +21,13 @@ public class CorsConfig {
                 "https://www.kedostt.com.tr/",
                 "https://kedostt.com.tr/",
                 "https://api.kedostt.com.tr",
-                "https://api.kedostt.com.tr/"
+                "https://api.kedostt.com.tr/",
+                "http://www.kedostt.com.tr",
+                "http://kedostt.com.tr",
+                "http://www.kedostt.com.tr/",
+                "http://kedostt.com.tr/",
+                "http://api.kedostt.com.tr",
+                "http://api.kedostt.com.tr/"
         ));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
