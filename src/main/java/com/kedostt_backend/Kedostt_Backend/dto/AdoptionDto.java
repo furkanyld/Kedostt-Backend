@@ -35,6 +35,8 @@ public class AdoptionDto {
 
     private String note;
 
+    private String username;
+
     private Long animalId;
 
     private String animalName;

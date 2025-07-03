@@ -37,6 +37,7 @@ public class AdoptionMapper {
                 .status(adoption.getStatus())
                 .note(adoption.getNote())
                 .createdAt(adoption.getCreatedAt())
+                .username(adoption.getUser() != null ? adoption.getUser().getUsername() : null)
                 .animalId(adoption.getAnimal().getId())
                 .animalName(adoption.getAnimal().getName())
                 .build();
