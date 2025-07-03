@@ -20,8 +20,8 @@ public class AdoptionController {
     private final AdoptionService adoptionService;
 
     @PostMapping
-    public ResponseEntity<AdoptionDto> apply(@RequestBody @Valid AdoptionDto dto) {
-        AdoptionDto created = adoptionService.createAdoption(dto);
+    public ResponseEntity<AdoptionDto> apply(@RequestBody @Valid AdoptionDto dto, Authentication authentication) {
+        AdoptionDto created = adoptionService.createAdoption(dto, authentication);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 

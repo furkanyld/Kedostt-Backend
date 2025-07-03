@@ -11,6 +11,7 @@ import com.kedostt_backend.Kedostt_Backend.repository.UserRepository;
 import com.kedostt_backend.Kedostt_Backend.service.AdoptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -26,11 +27,19 @@ public class AdoptionServiceImpl implements AdoptionService {
     private final AdoptionMapper adoptionMapper;
 
     @Override
-    public AdoptionDto createAdoption(AdoptionDto dto) {
+    public AdoptionDto createAdoption(AdoptionDto dto, Authentication authentication) {
         Animal animal = animalRepository.findById(dto.getAnimalId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Hayvan bulunamadı"));
 
         Adoption adoption = adoptionMapper.toEntity(dto, animal);
+
+        if (authentication != null) {
+            String username = authentication.getName();
+            User user = userRepository.findByUsername(username)
+                    .orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı!"));
+            adoption.setUser(user);
+        }
+
         return adoptionMapper.toDto(adoptionRepository.save(adoption));
     }
 
