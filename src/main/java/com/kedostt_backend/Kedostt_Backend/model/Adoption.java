@@ -44,7 +44,7 @@ public class Adoption {
     private Animal animal;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = true)
     private User user;
 
     @PrePersist
