@@ -39,6 +39,7 @@ public class SecurityConfig {
                 ))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/ping").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/animals/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/adoption/**").permitAll()
