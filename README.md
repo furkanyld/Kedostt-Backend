@@ -13,8 +13,10 @@
 
 ---
 
-## Project Structure
+### 📁 Project Structure
 
+```text
+src/
 ├── controller
 ├── service
 ├── repository
@@ -22,6 +24,7 @@
 ├── model
 ├── security
 └── config
+```
 
 ---
 
