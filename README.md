@@ -2,8 +2,8 @@
 
 **Kedostt** is a web platform designed to help stray animals find loving homes and make it easier for people to donate and apply for adoption. This repository contains the backend services built with **Spring Boot**.
 
-> ✅ **Live API:** [https://api.kedostt.com.tr](https://api.kedostt.com.tr) 
-> This backend is currently deployed and actively running on **Render**.
+> ✅ **Live API:** [https://api.kedostt.com.tr](https://api.kedostt.com.tr). 
+> This RESTful API is currently deployed and actively running on **Render**.
 
 ## 🚀 Features
 
