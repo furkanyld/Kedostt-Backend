@@ -36,9 +36,6 @@ Project Structure
 
 - POST /api/auth/login
 
-👨‍💻 Developer
-LinkedIn: Furkan Yıldız
-
 ---
 
 ## ⚙️ Setup
@@ -61,3 +58,8 @@ spring.datasource.password=your_password
 
 jwt.secret=YourVerySecretKey
 jwt.expiration=86400000
+```
+---
+
+👨‍💻 Developer
+LinkedIn: [Furkan Yıldız](www.linkedin.com/in/furkan-yıldız-584383254)
