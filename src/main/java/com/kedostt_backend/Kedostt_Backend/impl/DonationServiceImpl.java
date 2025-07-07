@@ -9,6 +9,7 @@ import com.kedostt_backend.Kedostt_Backend.repository.DonationRepository;
 import com.kedostt_backend.Kedostt_Backend.service.DonationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class DonationServiceImpl implements DonationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<DonationDto> getAllDonations(){
         return donationRepository.findAll()
                 .stream()
@@ -38,6 +40,7 @@ public class DonationServiceImpl implements DonationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public DonationDto getDonationById(Long id) {
         Donation donation = donationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Bağış bulunamadı!"));
@@ -45,6 +48,7 @@ public class DonationServiceImpl implements DonationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<DonationDto> getDonationsByAnimalId(Long id) {
         Animal animal = animalRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Hayvan bulunamadı!"));
@@ -55,6 +59,7 @@ public class DonationServiceImpl implements DonationService {
     }
 
     @Override
+    @Transactional
     public DonationDto updateDonation(Long id, DonationDto donationDto) {
         Donation donation = donationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Bağış bulunamadı"));

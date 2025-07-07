@@ -8,6 +8,7 @@ import com.kedostt_backend.Kedostt_Backend.repository.AnimalRepository;
 import com.kedostt_backend.Kedostt_Backend.service.AnimalService;
 import lombok.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +29,7 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<AnimalResponse> getAllAnimals(){
         return animalRepository.findAll().stream()
                 .map(animalMapper::toDto)
@@ -35,6 +37,7 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public AnimalResponse getAnimalById(Long id){
         Animal animal = animalRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Hayvan Bulunamadı: "+id));
@@ -42,6 +45,7 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
+    @Transactional
     public AnimalResponse updateAnimal(Long id, AnimalRequest request) {
         Animal animal = animalRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Hayvan bulunamadı!"));

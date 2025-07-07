@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -44,6 +45,7 @@ public class AdoptionServiceImpl implements AdoptionService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<AdoptionDto> getAllAdoptions() {
         return adoptionRepository.findAll()
                 .stream()
@@ -52,6 +54,7 @@ public class AdoptionServiceImpl implements AdoptionService {
     }
 
     @Override
+    @Transactional
     public AdoptionDto updateAdoptionStatus(Long id, String status){
         Adoption adoption = adoptionRepository.findById(id)
                 .orElseThrow(()-> new RuntimeException("Başvuru bulunamadı!"));
@@ -61,6 +64,7 @@ public class AdoptionServiceImpl implements AdoptionService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<AdoptionDto> getAdoptionsByUsername(String username){
         User user = userRepository.findByUsername(username)
                 .orElseThrow(()-> new RuntimeException("Kullanıcı bulunamadı!"));
@@ -72,6 +76,7 @@ public class AdoptionServiceImpl implements AdoptionService {
     }
 
     @Override
+    @Transactional
     public void acceptAdoption(Long adoptionId) {
         Adoption adoption = adoptionRepository.findById(adoptionId)
                 .orElseThrow(() -> new RuntimeException("Adoption not found"));
