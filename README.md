@@ -24,7 +24,7 @@ Project Structure
 
 ---
 
-📬 Example Endpoints
+## 📬 Example Endpoints
 
 - GET /api/animals
 
