@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -54,5 +56,44 @@ public class AnimalController {
     public ResponseEntity<String> toggleVisibility(@PathVariable Long id) {
         animalService.toggleVisibility(id);
         return ResponseEntity.ok("Yayın durumu değiştirildi.");
+    }
+
+    @PostMapping("/upload")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<AnimalResponse> createAnimalWithFiles(
+            @RequestParam("name") String name,
+            @RequestParam("species") String species,
+            @RequestParam("breed") String breed,
+            @RequestParam("ageYears") int ageYears,
+            @RequestParam("ageMonths") int ageMonths,
+            @RequestParam("gender") String gender,
+            @RequestParam("description") String description,
+            @RequestParam("images") List<MultipartFile> images,
+            @RequestParam(value = "video", required = false) MultipartFile video,
+            @RequestParam(value = "visible", defaultValue = "true") boolean visible
+    ) throws IOException {
+        return ResponseEntity.ok(animalService.createAnimalWithFiles(
+                name, species, breed, ageYears, ageMonths, gender, description, images, video, visible
+        ));
+    }
+
+    @PutMapping("/upload/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<AnimalResponse> updateAnimalWithFiles(
+            @PathVariable Long id,
+            @RequestParam("name") String name,
+            @RequestParam("species") String species,
+            @RequestParam("breed") String breed,
+            @RequestParam("ageYears") int ageYears,
+            @RequestParam("ageMonths") int ageMonths,
+            @RequestParam("gender") String gender,
+            @RequestParam("description") String description,
+            @RequestParam(value = "images", required = false) List<MultipartFile> images,
+            @RequestParam(value = "video", required = false) MultipartFile video,
+            @RequestParam(value = "visible", defaultValue = "true") boolean visible
+    ) throws IOException {
+        return ResponseEntity.ok(animalService.updateAnimalWithFiles(
+                id, name, species, breed, ageYears, ageMonths, gender, description, images, video, visible
+        ));
     }
 }

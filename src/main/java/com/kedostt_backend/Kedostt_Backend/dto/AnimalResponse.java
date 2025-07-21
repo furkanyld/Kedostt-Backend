@@ -2,6 +2,8 @@ package com.kedostt_backend.Kedostt_Backend.dto;
 
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,7 +26,9 @@ public class AnimalResponse {
 
     private String description;
 
-    private String imageUrl;
+    private List<String> imageUrls;
+
+    private String videoUrl;
 
     private boolean adopted;
 

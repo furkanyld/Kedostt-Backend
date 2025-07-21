@@ -35,8 +35,12 @@ public class Animal {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    @Column(columnDefinition = "TEXT")
-    private String imageUrl;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "animal_images", joinColumns = @JoinColumn(name = "animal_id"))
+    @Column(name = "image_url")
+    private List<String> imageUrls = new ArrayList<>();
+
+    private String videoUrl;
 
     private boolean adopted = false;
 

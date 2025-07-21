@@ -17,7 +17,8 @@ public class AnimalMapper {
                 .ageMonths(request.getAgeMonths())
                 .gender(request.getGender())
                 .description(request.getDescription())
-                .imageUrl(request.getImageUrl())
+                .imageUrls(request.getImageUrls())
+                .videoUrl(request.getVideoUrl())
                 .isVisible(request.isVisible())
                 .build();
     }
@@ -32,7 +33,8 @@ public class AnimalMapper {
                 .ageMonths(animal.getAgeMonths())
                 .gender(animal.getGender())
                 .description(animal.getDescription())
-                .imageUrl(animal.getImageUrl())
+                .imageUrls(animal.getImageUrls())
+                .videoUrl(animal.getVideoUrl())
                 .adopted(animal.isAdopted())
                 .isVisible(animal.isVisible())
                 .build();
@@ -46,7 +48,8 @@ public class AnimalMapper {
         animal.setAgeMonths(request.getAgeMonths());
         animal.setGender(request.getGender());
         animal.setDescription(request.getDescription());
-        animal.setImageUrl(request.getImageUrl());
+        animal.setImageUrls(request.getImageUrls());
+        animal.setVideoUrl(request.getVideoUrl());
         animal.setVisible(request.isVisible());
     }
 }
