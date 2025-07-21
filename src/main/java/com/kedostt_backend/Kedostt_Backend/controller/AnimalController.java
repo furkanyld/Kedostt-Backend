@@ -91,11 +91,12 @@ public class AnimalController {
             @RequestParam(value = "existingImageUrls", required = false) List<String> existingImageUrls,
             @RequestParam(value = "images", required = false) List<MultipartFile> newImages,
             @RequestParam(value = "video", required = false) MultipartFile video,
-            @RequestParam(value = "visible", defaultValue = "true") boolean visible
+            @RequestParam(value = "visible", defaultValue = "true") boolean visible,
+            @RequestParam(name = "deleteVideo", required = false) boolean deleteVideo
     ) throws IOException {
         AnimalResponse response = animalService.updateAnimalWithFiles(
                 id, name, species, breed, ageYears, ageMonths, gender, description,
-                existingImageUrls, newImages, video, visible
+                existingImageUrls, newImages, video, visible, deleteVideo
         );
         return ResponseEntity.ok(response);
     }

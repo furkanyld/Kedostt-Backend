@@ -144,7 +144,8 @@ public class AnimalServiceImpl implements AnimalService {
             List<String> existingImageUrls,
             List<MultipartFile> newImages,
             MultipartFile video,
-            boolean visible
+            boolean visible,
+            boolean deleteVideo
     ) throws IOException {
         Animal animal = animalRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Hayvan bulunamadı: " + id));
@@ -152,10 +153,9 @@ public class AnimalServiceImpl implements AnimalService {
         String uploadDir = "uploads/";
         Files.createDirectories(Paths.get(uploadDir));
 
-        // Yeni yüklenen görselleri kaydet
         List<String> finalImageUrls = new ArrayList<>();
         if (existingImageUrls != null) {
-            finalImageUrls.addAll(existingImageUrls); // 🧩 Kalanları tut
+            finalImageUrls.addAll(existingImageUrls);
         }
         if (newImages != null) {
             for (MultipartFile file : newImages) {
@@ -163,21 +163,23 @@ public class AnimalServiceImpl implements AnimalService {
                     String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
                     Path filePath = Paths.get(uploadDir + fileName);
                     Files.write(filePath, file.getBytes());
-                    finalImageUrls.add("/uploads/" + fileName); // 📸 Yeni yolu ekle
+                    finalImageUrls.add("/uploads/" + fileName);
                 }
             }
         }
 
-        // Videoyu güncelle (isteğe bağlı)
-        String videoPath = animal.getVideoUrl(); // 👈 mevcut video tutulur
-        if (video != null && !video.isEmpty()) {
+        String videoPath = animal.getVideoUrl();
+
+        if (deleteVideo) {
+            videoPath = null; // ⛔ sil seçilmişse, öncelik burada
+        } else if (video != null && !video.isEmpty()) {
+            // ✅ silme yoksa ve yeni video varsa, onu yaz
             String fileName = UUID.randomUUID() + "_" + video.getOriginalFilename();
             Path filePath = Paths.get(uploadDir + fileName);
             Files.write(filePath, video.getBytes());
             videoPath = "/uploads/" + fileName;
         }
 
-        // Hayvan güncelle
         animal.setName(name);
         animal.setSpecies(species);
         animal.setBreed(breed);

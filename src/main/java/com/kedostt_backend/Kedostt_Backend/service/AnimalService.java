@@ -38,6 +38,7 @@ public interface AnimalService {
             List<String> existingImageUrls,
             List<MultipartFile> newImages,
             MultipartFile video,
-            boolean visible
+            boolean visible,
+            boolean deleteVideo
     ) throws IOException;
 }
