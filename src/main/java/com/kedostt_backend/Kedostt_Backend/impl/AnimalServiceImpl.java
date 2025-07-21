@@ -141,48 +141,43 @@ public class AnimalServiceImpl implements AnimalService {
             int ageMonths,
             String gender,
             String description,
-            List<MultipartFile> images,
+            List<String> existingImageUrls,
+            List<MultipartFile> newImages,
             MultipartFile video,
             boolean visible
     ) throws IOException {
-
         Animal animal = animalRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Hayvan bulunamadı: " + id));
 
-        // 📦 uploads klasörü oluştur
         String uploadDir = "uploads/";
         Files.createDirectories(Paths.get(uploadDir));
 
-        // 🔁 Eski görselleri sil ve veritabanından kaldır
-        if (animal.getImageUrls() != null) {
-            for (String oldPath : animal.getImageUrls()) {
-                Files.deleteIfExists(Paths.get(oldPath));
-            }
+        // Yeni yüklenen görselleri kaydet
+        List<String> finalImageUrls = new ArrayList<>();
+        if (existingImageUrls != null) {
+            finalImageUrls.addAll(existingImageUrls); // 🧩 Kalanları tut
         }
-
-        // 📷 Yeni görselleri kaydet
-        List<String> newImageUrls = new ArrayList<>();
-        if (images != null) {
-            for (MultipartFile file : images) {
+        if (newImages != null) {
+            for (MultipartFile file : newImages) {
                 if (!file.isEmpty()) {
                     String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
                     Path filePath = Paths.get(uploadDir + fileName);
                     Files.write(filePath, file.getBytes());
-                    newImageUrls.add(filePath.toString());
+                    finalImageUrls.add("/uploads/" + fileName); // 📸 Yeni yolu ekle
                 }
             }
         }
 
-        // 🎥 Videoyu kaydet (isteğe bağlı)
-        String videoPath = null;
+        // Videoyu güncelle (isteğe bağlı)
+        String videoPath = animal.getVideoUrl(); // 👈 mevcut video tutulur
         if (video != null && !video.isEmpty()) {
             String fileName = UUID.randomUUID() + "_" + video.getOriginalFilename();
             Path filePath = Paths.get(uploadDir + fileName);
             Files.write(filePath, video.getBytes());
-            videoPath = filePath.toString();
+            videoPath = "/uploads/" + fileName;
         }
 
-        // 📝 Hayvan verisini güncelle
+        // Hayvan güncelle
         animal.setName(name);
         animal.setSpecies(species);
         animal.setBreed(breed);
@@ -190,7 +185,7 @@ public class AnimalServiceImpl implements AnimalService {
         animal.setAgeMonths(ageMonths);
         animal.setGender(gender);
         animal.setDescription(description);
-        animal.setImageUrls(newImageUrls);
+        animal.setImageUrls(finalImageUrls);
         animal.setVideoUrl(videoPath);
         animal.setVisible(visible);
 

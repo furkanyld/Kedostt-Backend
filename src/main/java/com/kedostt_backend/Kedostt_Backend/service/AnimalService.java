@@ -35,7 +35,8 @@ public interface AnimalService {
             int ageMonths,
             String gender,
             String description,
-            List<MultipartFile> images,
+            List<String> existingImageUrls,
+            List<MultipartFile> newImages,
             MultipartFile video,
             boolean visible
     ) throws IOException;
