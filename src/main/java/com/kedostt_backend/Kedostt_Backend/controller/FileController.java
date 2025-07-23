@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -37,15 +38,16 @@ public class FileController {
     }
 
     @PostMapping("/images/upload")
-    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file) {
         try {
-            String imageUrl = imageKitService.uploadImage(file); // ✔️ sadece string URL dönülüyor
-            return ResponseEntity.ok(imageUrl);
+            Map<String, String> imageInfo = imageKitService.uploadImage(file);
+            return ResponseEntity.ok(imageInfo);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Upload failed: " + e.getMessage());
+                    .body(Map.of("error", "Upload failed: " + e.getMessage()));
         }
     }
+
 
     @DeleteMapping("/images/{fileId}")
     public ResponseEntity<String> deleteImage(@PathVariable String fileId) {

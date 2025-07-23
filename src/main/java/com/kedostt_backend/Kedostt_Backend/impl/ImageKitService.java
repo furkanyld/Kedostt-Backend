@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ImageKitService {
@@ -22,7 +24,7 @@ public class ImageKitService {
         ImageKit.getInstance().setConfig(config);
     }
 
-    public String uploadImage(MultipartFile file) throws Exception {
+    public Map<String, String> uploadImage(MultipartFile file) throws Exception {
         FileCreateRequest fileCreateRequest = new FileCreateRequest(file.getBytes(), file.getOriginalFilename());
         fileCreateRequest.setTags(List.of("Kedostt"));
         fileCreateRequest.setResponseFields(List.of("thumbnail", "tags"));
@@ -33,8 +35,13 @@ public class ImageKitService {
             throw new RuntimeException("Upload başarısız.");
         }
 
-        return result.getUrl();
+        Map<String, String> map = new HashMap<>();
+        map.put("url", result.getUrl());
+        map.put("fileId", result.getFileId());
+
+        return map;
     }
+
 
     public void deleteImage(String fileId) throws Exception {
         ImageKit.getInstance().deleteFile(fileId);
