@@ -1,7 +1,7 @@
 package com.kedostt_backend.Kedostt_Backend.mapper;
 
-import com.kedostt_backend.Kedostt_Backend.dto.AnimalResponse;
 import com.kedostt_backend.Kedostt_Backend.dto.AnimalRequest;
+import com.kedostt_backend.Kedostt_Backend.dto.AnimalResponse;
 import com.kedostt_backend.Kedostt_Backend.model.Animal;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +18,9 @@ public class AnimalMapper {
                 .gender(request.getGender())
                 .description(request.getDescription())
                 .imageUrls(request.getImageUrls())
+                .imageFileIds(request.getImageFileIds()) // ✅ eklendi
                 .videoUrl(request.getVideoUrl())
+                .videoFileId(request.getVideoFileId())   // ✅ eklendi
                 .isVisible(request.isVisible())
                 .build();
     }
@@ -34,7 +36,9 @@ public class AnimalMapper {
                 .gender(animal.getGender())
                 .description(animal.getDescription())
                 .imageUrls(animal.getImageUrls())
+                .imageFileIds(animal.getImageFileIds()) // ✅ eklendi
                 .videoUrl(animal.getVideoUrl())
+                .videoFileId(animal.getVideoFileId())   // ✅ eklendi
                 .adopted(animal.isAdopted())
                 .isVisible(animal.isVisible())
                 .build();
@@ -49,7 +53,9 @@ public class AnimalMapper {
         animal.setGender(request.getGender());
         animal.setDescription(request.getDescription());
         animal.setImageUrls(request.getImageUrls());
+        animal.setImageFileIds(request.getImageFileIds()); // ✅ eklendi
         animal.setVideoUrl(request.getVideoUrl());
+        animal.setVideoFileId(request.getVideoFileId());   // ✅ eklendi
         animal.setVisible(request.isVisible());
     }
 }

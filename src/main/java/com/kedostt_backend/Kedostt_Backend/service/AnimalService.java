@@ -8,12 +8,18 @@ import java.io.IOException;
 import java.util.List;
 
 public interface AnimalService {
-    AnimalResponse  createAnimal(AnimalRequest animalRequest );
+    AnimalResponse createAnimal(AnimalRequest animalRequest);
+
     List<AnimalResponse> getAllAnimals();
+
     AnimalResponse getAnimalById(Long id);
+
     AnimalResponse updateAnimal(Long id, AnimalRequest request);
+
     void toggleVisibility(Long animalId);
+
     void deleteAnimal(Long id);
+
     AnimalResponse createAnimalWithFiles(
             String name,
             String species,
@@ -26,7 +32,8 @@ public interface AnimalService {
             MultipartFile video,
             boolean visible
     ) throws IOException;
-    AnimalResponse updateAnimalWithFiles(
+
+    /*AnimalResponse updateAnimalWithFiles(
             Long id,
             String name,
             String species,
@@ -40,5 +47,13 @@ public interface AnimalService {
             MultipartFile video,
             boolean visible,
             boolean deleteVideo
-    ) throws IOException;
+    ) throws IOException;*/
+    AnimalResponse updateAnimalWithFiles(
+            Long id,
+            AnimalRequest request,
+            List<String> existingImageUrls,
+            List<String> existingImageFileIds,
+            List<String> deleteImageFileIds,
+            boolean deleteVideo
+    );
 }

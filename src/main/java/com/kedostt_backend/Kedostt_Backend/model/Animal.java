@@ -2,8 +2,9 @@ package com.kedostt_backend.Kedostt_Backend.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.List;
+
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -49,4 +50,12 @@ public class Animal {
 
     @OneToMany(mappedBy = "animal", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Donation> donations = new ArrayList<>();
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "animal_image_file_ids", joinColumns = @JoinColumn(name = "animal_id"))
+    @Column(name = "image_file_id")
+    private List<String> imageFileIds = new ArrayList<>();
+
+    @Column(name = "video_file_id")
+    private String videoFileId;
 }

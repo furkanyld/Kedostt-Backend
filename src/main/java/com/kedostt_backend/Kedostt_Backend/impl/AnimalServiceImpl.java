@@ -6,7 +6,7 @@ import com.kedostt_backend.Kedostt_Backend.mapper.AnimalMapper;
 import com.kedostt_backend.Kedostt_Backend.model.Animal;
 import com.kedostt_backend.Kedostt_Backend.repository.AnimalRepository;
 import com.kedostt_backend.Kedostt_Backend.service.AnimalService;
-import lombok.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -130,7 +130,7 @@ public class AnimalServiceImpl implements AnimalService {
         return animalMapper.toDto(saved);
     }
 
-    @Override
+    /*@Override
     @Transactional
     public AnimalResponse updateAnimalWithFiles(
             Long id,
@@ -193,5 +193,68 @@ public class AnimalServiceImpl implements AnimalService {
 
         Animal saved = animalRepository.save(animal);
         return animalMapper.toDto(saved);
+    }*/
+    @Override
+    @Transactional
+    public AnimalResponse updateAnimalWithFiles(
+            Long id,
+            AnimalRequest request,
+            List<String> existingImageUrls,
+            List<String> existingImageFileIds,
+            List<String> deleteImageFileIds,
+            boolean deleteVideo
+    ) {
+        return animalRepository.findById(id)
+                .map(animal -> {
+                    // 1. Temel alanları güncelle
+                    animal.setName(request.getName());
+                    animal.setSpecies(request.getSpecies());
+                    animal.setBreed(request.getBreed());
+                    animal.setAgeYears(request.getAgeYears());
+                    animal.setAgeMonths(request.getAgeMonths());
+                    animal.setGender(request.getGender());
+                    animal.setDescription(request.getDescription());
+                    animal.setVisible(request.isVisible());
+
+                    // 2. Görseller
+                    List<String> updatedUrls = new ArrayList<>();
+                    List<String> updatedFileIds = new ArrayList<>();
+
+                    if (existingImageUrls != null && existingImageFileIds != null) {
+                        updatedUrls.addAll(existingImageUrls);
+                        updatedFileIds.addAll(existingImageFileIds);
+                    }
+
+                    if (request.getImageUrls() != null && request.getImageFileIds() != null) {
+                        updatedUrls.addAll(request.getImageUrls());
+                        updatedFileIds.addAll(request.getImageFileIds());
+                    }
+
+                    if (deleteImageFileIds != null) {
+                        for (String fileId : deleteImageFileIds) {
+                            int index = updatedFileIds.indexOf(fileId);
+                            if (index >= 0) {
+                                updatedFileIds.remove(index);
+                                updatedUrls.remove(index);
+                            }
+                        }
+                    }
+
+                    animal.setImageUrls(updatedUrls);
+                    animal.setImageFileIds(updatedFileIds);
+
+                    // 3. Video
+                    if (deleteVideo) {
+                        animal.setVideoUrl(null);
+                        animal.setVideoFileId(null);
+                    } else if (request.getVideoUrl() != null && request.getVideoFileId() != null) {
+                        animal.setVideoUrl(request.getVideoUrl());
+                        animal.setVideoFileId(request.getVideoFileId());
+                    }
+
+                    Animal saved = animalRepository.save(animal);
+                    return animalMapper.toDto(saved);
+                })
+                .orElseThrow(() -> new RuntimeException("Hayvan bulunamadı"));
     }
 }
