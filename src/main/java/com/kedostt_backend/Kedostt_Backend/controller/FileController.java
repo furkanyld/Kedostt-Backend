@@ -36,12 +36,11 @@ public class FileController {
                 .body(resource);
     }
 
-    // ImageKit'e dosya yükleme
     @PostMapping("/images/upload")
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
         try {
-            String imageUrl = imageKitService.uploadImage(file);
-            return ResponseEntity.ok(imageUrl); // Bu URL ImageKit’ten dönen link olacak
+            String imageUrl = imageKitService.uploadImage(file); // ✔️ sadece string URL dönülüyor
+            return ResponseEntity.ok(imageUrl);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Upload failed: " + e.getMessage());
@@ -58,5 +57,3 @@ public class FileController {
         }
     }
 }
-
-
