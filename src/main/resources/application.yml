@@ -30,3 +30,8 @@ springdoc:
 app:
   jwtSecret: ${JWT_SECRET}
   jwtExpirationMs: 86400000
+
+imagekit:
+  publicKey: ${IMAGEKIT_PUBLICKEY}
+  privateKey: ${IMAGEKIT_PRIVATEKEY}
+  urlEndpoint: ${IMAGEKIT_URLENDPOINT}
