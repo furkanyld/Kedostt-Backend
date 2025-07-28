@@ -9,15 +9,10 @@ import java.util.List;
 
 public interface AnimalService {
     AnimalResponse createAnimal(AnimalRequest animalRequest);
-
     List<AnimalResponse> getAllAnimals();
-
     AnimalResponse getAnimalById(Long id);
-
     AnimalResponse updateAnimal(Long id, AnimalRequest request);
-
     void toggleVisibility(Long animalId);
-
     void deleteAnimal(Long id);
 
     AnimalResponse createAnimalWithFiles(
@@ -33,21 +28,6 @@ public interface AnimalService {
             boolean visible
     ) throws IOException;
 
-    /*AnimalResponse updateAnimalWithFiles(
-            Long id,
-            String name,
-            String species,
-            String breed,
-            int ageYears,
-            int ageMonths,
-            String gender,
-            String description,
-            List<String> existingImageUrls,
-            List<MultipartFile> newImages,
-            MultipartFile video,
-            boolean visible,
-            boolean deleteVideo
-    ) throws IOException;*/
     AnimalResponse updateAnimalWithFiles(
             Long id,
             AnimalRequest request,

@@ -37,14 +37,10 @@ public class AnimalRequest {
     @NotBlank(message = "Açıklama girilmelidir")
     @Size(max = 500, message = "Açıklama en fazla 500 karakter olabilir")
     private String description;
-
-    // Yeni alanlar:
     private List<String> imageUrls;
-    private List<String> imageFileIds; // ✅ Eklemen gereken alan
-
+    private List<String> imageFileIds;
     private String videoUrl;
-    private String videoFileId;        // ✅ Eklemen gereken alan
-
+    private String videoFileId;
     private boolean isVisible = true;
 
     public AnimalRequest(String name, String species, String breed, int ageYears, int ageMonths,

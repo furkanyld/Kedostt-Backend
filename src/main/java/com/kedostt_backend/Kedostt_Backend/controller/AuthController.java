@@ -7,13 +7,8 @@ import com.kedostt_backend.Kedostt_Backend.dto.UserDto;
 import com.kedostt_backend.Kedostt_Backend.security.JwtTokenProvider;
 import com.kedostt_backend.Kedostt_Backend.service.AuthService;
 import com.kedostt_backend.Kedostt_Backend.service.UserService;
-import lombok.*;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -42,5 +37,10 @@ public class AuthController {
     public ResponseEntity<UserDto> register(@RequestBody RegisterRequest registerRequest) {
         UserDto registeredUser = userService.registerUser(registerRequest);
         return ResponseEntity.ok(registeredUser);
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity<?> validate() {
+        return ResponseEntity.ok().build(); // sadece token varsa 200 döner
     }
 }
