@@ -226,8 +226,16 @@ public class AnimalServiceImpl implements AnimalService {
                     }
 
                     if (request.getImageUrls() != null && request.getImageFileIds() != null) {
-                        updatedUrls.addAll(request.getImageUrls());
-                        updatedFileIds.addAll(request.getImageFileIds());
+                        for (int i = 0; i < request.getImageUrls().size(); i++) {
+                            String url = request.getImageUrls().get(i);
+                            String fileId = request.getImageFileIds().get(i);
+
+                            // Eğer daha önce eklenmemişse ekle
+                            if (!updatedFileIds.contains(fileId) && !updatedUrls.contains(url)) {
+                                updatedFileIds.add(fileId);
+                                updatedUrls.add(url);
+                            }
+                        }
                     }
 
                     if (deleteImageFileIds != null) {
