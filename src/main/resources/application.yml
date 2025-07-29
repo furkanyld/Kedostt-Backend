@@ -21,6 +21,11 @@ spring:
     locations: classpath:db/migration
     default-schema: public
 
+  servlet:
+    multipart:
+      max-file-size: ${SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE}
+      max-request-size: ${SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE}
+
 springdoc:
   api-docs:
     path: /v3/api-docs
