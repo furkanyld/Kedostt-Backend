@@ -48,6 +48,28 @@ public class FileController {
         }
     }
 
+    @PostMapping("/videos/upload")
+    public ResponseEntity<?> uploadVideo(@RequestParam("file") MultipartFile file) {
+        try {
+            if (file == null || file.isEmpty()) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("error", "Video dosyası boş veya gönderilmedi."));
+            }
+
+            String contentType = file.getContentType();
+            if (contentType == null || !contentType.startsWith("video/")) {
+                return ResponseEntity.badRequest()
+                        .body(Map.of("error", "Geçerli bir video dosyası yüklemelisiniz."));
+            }
+
+            Map<String, String> videoInfo = imageKitService.uploadVideo(file);
+            return ResponseEntity.ok(videoInfo);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Video upload failed: " + e.getMessage()));
+        }
+    }
 
     @DeleteMapping("/images/{fileId}")
     public ResponseEntity<String> deleteImage(@PathVariable String fileId) {

@@ -43,6 +43,29 @@ public class ImageKitService {
         return map;
     }
 
+    public Map<String, String> uploadVideo(MultipartFile file) throws Exception {
+        String mimeType = file.getContentType();
+        if (mimeType == null || !mimeType.startsWith("video/")) {
+            throw new IllegalArgumentException("Geçersiz video formatı.");
+        }
+
+        FileCreateRequest fileCreateRequest = new FileCreateRequest(file.getBytes(), file.getOriginalFilename());
+        fileCreateRequest.setTags(List.of("Kedostt", "video"));
+        fileCreateRequest.setUseUniqueFileName(true);
+        fileCreateRequest.setResponseFields(List.of("tags")); // thumbnail işe yaramaz, çünkü video
+
+        Result result = ImageKit.getInstance().upload(fileCreateRequest);
+
+        if (result.getUrl() == null || result.getFileId() == null) {
+            throw new RuntimeException("Video upload başarısız.");
+        }
+
+        Map<String, String> map = new HashMap<>();
+        map.put("url", result.getUrl());
+        map.put("fileId", result.getFileId());
+
+        return map;
+    }
 
     public void deleteImage(String fileId) throws Exception {
         ImageKit.getInstance().deleteFile(fileId);
