@@ -28,6 +28,7 @@ public class ImageKitService {
         FileCreateRequest fileCreateRequest = new FileCreateRequest(file.getBytes(), file.getOriginalFilename());
         fileCreateRequest.setTags(List.of("Kedostt"));
         fileCreateRequest.setResponseFields(List.of("thumbnail", "tags"));
+        fileCreateRequest.setUseUniqueFileName(false);
 
         Result result = ImageKit.getInstance().upload(fileCreateRequest);
 
